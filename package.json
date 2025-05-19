@@ -17,6 +17,7 @@
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-blob-util": "^0.21.2",
+    "react-native-fs": "^2.20.0",
     "react-native-ota-hot-update": "^2.3.0"
   },
   "devDependencies": {

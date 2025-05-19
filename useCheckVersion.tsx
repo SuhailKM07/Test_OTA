@@ -189,7 +189,7 @@
 import hotUpdate from 'react-native-ota-hot-update';
 import {Alert, LayoutAnimation, Platform, UIManager} from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
-import React from 'react';
+import React, { useEffect } from 'react';
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -278,12 +278,12 @@ export const useCheckVersion = () => {
     setProgress(0);
     setLoading(true);
     hotUpdate.git.checkForGitUpdate({
-      branch: Platform.OS === 'ios' ? 'iOS' : 'android',
+      branch: 'master',
       bundlePath:
         Platform.OS === 'ios'
           ? 'output/main.jsbundle'
           : 'output/index.android.bundle',
-      url: 'https://github.com/SuhailKM07/T_OTA.git',
+      url: 'https://github.com/SuhailKM07/Test_OTA.git',
       onCloneFailed(msg: string) {
         Alert.alert('Clone project failed!', msg, [
           {
@@ -348,8 +348,10 @@ export const useCheckVersion = () => {
   const getMeta = async () => {
     return hotUpdate.getUpdateMetadata();
   };
-  React.useEffect(() => {
+ useEffect(() => {
     hotUpdate.getCurrentVersion().then(data => {
+      console.log(data);
+      
       setVersion(`${data}`);
     });
   }, []);

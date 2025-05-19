@@ -76,7 +76,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Image source={require('./promotional_banner.jpeg')} style={styles.img} />
       <Text
         style={{color: 'white'}}>{`Version: ${version.state.version}`}</Text>
       <Button title={'check update OTA'} onPress={version.onCheckVersion} />
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    backgroundColor : 'rgba(90, 224, 248, 0.6)'
+    backgroundColor: 'rgba(248, 90, 90, 0.6)',
   },
   box: {
     width: 60,
