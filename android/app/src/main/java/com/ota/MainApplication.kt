@@ -11,11 +11,18 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
+import com.otahotupdate.OtaHotUpdate
 
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
       object : DefaultReactNativeHost(this) {
+
+        override fun getJSBundleFile(): String? {
+          return OtaHotUpdate.bundleJS(this@MainApplication)
+          // or: return OtaHotUpdate.bundleJS(this@MainApplication, false)
+        }
+
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
