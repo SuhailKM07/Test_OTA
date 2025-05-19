@@ -14,8 +14,8 @@ export default function App() {
 
       <Button title={'check update OTA'} onPress={version.onCheckVersion} />
       <Button title={'rollback OTA'} onPress={version.rollBack} />
-      {/* <Button title={'check update Git'} onPress={version.onCheckGitVersion} />
-      <Button title={'remove update Git'} onPress={version.removeGitUpdate} /> */}
+      <Button title={'check update Git'} onPress={version.onCheckGitVersion} />
+      <Button title={'remove update Git'} onPress={version.removeGitUpdate} />
 
       {version.state.loading && <Text>Loading from git...</Text>}
       {!!version.state.progress && (

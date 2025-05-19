@@ -95,12 +95,9 @@ export const useCheckVersion = () => {
     setProgress(0);
     setLoading(true);
     hotUpdate.git.checkForGitUpdate({
-      branch: Platform.OS === 'ios' ? 'iOS' : 'android',
-      bundlePath:
-        Platform.OS === 'ios'
-          ? 'output/main.jsbundle'
-          : 'output/index.android.bundle',
-      url: 'https://github.com/vantuan88291/OTA-demo-bundle.git',
+      branch: 'suhail1',
+      bundlePath: 'output/index.android.bundle',
+      url: 'https://github.com/SuhailKM07/Test_OTA.git',
       onCloneFailed(msg: string) {
         Alert.alert('Clone project failed!', msg, [
           {
