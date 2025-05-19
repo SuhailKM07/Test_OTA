@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    backgroundColor: 'rgba(248, 90, 90, 0.6)',
+    backgroundColor: 'rgba(248, 90, 232, 0.6)',
   },
   box: {
     width: 60,

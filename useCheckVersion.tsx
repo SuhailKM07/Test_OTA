@@ -189,7 +189,7 @@
 import hotUpdate from 'react-native-ota-hot-update';
 import {Alert, LayoutAnimation, Platform, UIManager} from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
-import React, { useEffect } from 'react';
+import React from 'react';
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -348,9 +348,8 @@ export const useCheckVersion = () => {
   const getMeta = async () => {
     return hotUpdate.getUpdateMetadata();
   };
- useEffect(() => {
+  React.useEffect(() => {
     hotUpdate.getCurrentVersion().then(data => {
-      console.log(data);
       setVersion(`${data}`);
     });
   }, []);

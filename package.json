@@ -4,14 +4,17 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android --active-arch-only",
-    "ios": "react-native run-ios --simulartor='iPhone 15 Pro (18.0)'",
-    "androidp": "react-native run-android --active-arch-only --mode Release",
-    "iosp": "react-native run-ios --simulartor='iPhone 15 Pro (18.0)' --mode Release",
+    "ios": "react-native run-ios --simulator='iPhone 15 Pro (18.0)'",
+
+    "androidp": "cd android && gradlew.bat assembleRelease && cd .. && react-native run-android --mode release",
+    "iosp": "react-native run-ios --simulator='iPhone 15 Pro (18.0)' --configuration Release",
+
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "export-android": "mkdir -p android\\output && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android\\output\\index.android.bundle --assets-dest android\\output",
-    "export-ios": "mkdir -p ios/output && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/output/main.jsbundle --assets-dest ios/output"
+
+    "export-android": "mkdir android\\output && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android\\output\\index.android.bundle --assets-dest android\\output",
+    "export-ios": "mkdir ios\\output && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios\\output\\main.jsbundle --assets-dest ios\\output"
   },
   "dependencies": {
     "react": "19.0.0",
