@@ -76,7 +76,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Image source={require('./promotional_banner.jpeg')} style = {{width : 300 , height : 200}} />
       <Text
         style={{color: 'white'}}>{`Version: ${version.state.version}`}</Text>
       <Button title={'check update OTA'} onPress={version.onCheckVersion} />

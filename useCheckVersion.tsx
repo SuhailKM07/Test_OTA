@@ -351,7 +351,6 @@ export const useCheckVersion = () => {
  useEffect(() => {
     hotUpdate.getCurrentVersion().then(data => {
       console.log(data);
-      
       setVersion(`${data}`);
     });
   }, []);
