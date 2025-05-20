@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    backgroundColor: 'red',
+    backgroundColor: 'green',
   },
   box: {
     width: 60,
