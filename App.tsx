@@ -8,9 +8,11 @@ export default function App() {
     <View style={styles.container}>
       <Text
         style={{
-          color: 'white',
+          color: 'red',
           fontSize: 20,
         }}>{`Version: ${version.state.version}`}</Text>
+
+        <Image source={require('./promotional_banner.jpeg')} style = {{width : 200 , height : 300}} />
 
       <Button title={'check update OTA'} onPress={version.onCheckVersion} />
       <Button title={'rollback OTA'} onPress={version.rollBack} />
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    backgroundColor: 'green',
+    backgroundColor: '#FEF8DD',
   },
   box: {
     width: 60,
