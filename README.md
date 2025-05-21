@@ -1,97 +1,57 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+**📦 OTA Update Process for Android (React Native)**
+This guide explains how to generate and upload OTA updates for Android using react-native-ota-hot-update and Supabase Storage.
 
-# Getting Started
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
-
-## Step 1: Start Metro
-
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+# 🛠️ Step-by-Step Instructions
+Generate OTA Bundle
+Run the following command to export the Android OTA bundle:
+```js
+npm run export-android
 ```
 
-## Step 2: Build and run your app
+# Upload to Supabase
+Open the android folder in your file explorer.
+Locate the file: index.android.bundle.zip.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+Drag and drop this file into your Supabase Storage bucket (e.g., updates/).
 
-### Android
+# Get the Public URL
+In Supabase, click the three dots (⋮) next to the uploaded file.
 
-```sh
-# Using npm
-npm run android
+Select “Copy Public URL”.
 
-# OR using Yarn
-yarn android
+# Update update.json
+Paste the copied URL into the # downloadAndroidUrl field.
+
+Increment the version value.
+
+Example:
+```js
+{
+  "version": "1.0.2",
+  "downloadAndroidUrl": "https://xyz.supabase.co/storage/v1/object/public/updates/index.android.bundle.zip"
+}
 ```
 
-### iOS
+**Use the URL in App Code**
+Go to your App.tsx file (or the file where OTA update is called).
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+Paste the updated URL or version reference where your OTA update function fetches the bundle.
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+**🔁 Example OTA Fetch Usage**
+```js
+checkForUpdates({
+  platform: 'android',
+  url: 'https://xyz.supabase.co/storage/v1/object/public/updates/index.android.bundle.zip',
+  version: '1.0.2'
+});
 ```
 
-Then, and every time you update your native dependencies, run:
 
-```sh
-bundle exec pod install
+# Note :-
+
+To test this project run the command as below
+
+```js
+npm run androidp
 ```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
