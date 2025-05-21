@@ -5,18 +5,15 @@ import { name as appName } from './app.json';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import RNFS from 'react-native-fs';
 
-const OTA_ASSET_BASE_PATH = `${RNFS.DocumentDirectoryPath}/output/images/`;
+const OTA_ASSET_BASE_PATH = `${RNFS.DocumentDirectoryPath}/output/drawable-mdpi/`;
 
-// 🧠 In-memory cache of available OTA images
 const availableOtaImages = new Set();
 
-// 🔄 Preload OTA image filenames on app start
 RNFS.readDir(OTA_ASSET_BASE_PATH)
   .then(files => {
     files.forEach(file => availableOtaImages.add(file.name));
   })
   .catch(() => {
-    // Ignore error if directory doesn't exist
   });
 
 const originalResolveAssetSource = resolveAssetSource;
@@ -45,8 +42,6 @@ function patchedResolveAssetSource(source) {
   return resolved;
 }
 
-// ✅ Patch RN's asset loader
 require('react-native/Libraries/Image/resolveAssetSource').default = patchedResolveAssetSource;
 
-// 🔁 App Start
 AppRegistry.registerComponent(appName, () => App);

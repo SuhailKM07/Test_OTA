@@ -44,7 +44,7 @@ const RegisterScreen = () => {
   const startUpdate = async () => {
     try {
       const response = await fetch(
-        'https://zpxhngudkplmusxmrytv.supabase.co/storage/v1/object/sign/superapp/update.json?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2RmNDVlZDgwLTkwN2QtNDM5MC05NzAxLWMyZmY0ZDNlOGE3YyJ9.eyJ1cmwiOiJzdXBlcmFwcC91cGRhdGUuanNvbiIsImlhdCI6MTc0Nzc0MzM0MCwiZXhwIjoxNzQ4MzQ4MTQwfQ.7N_0E4DAtDscSD-iLu71eYGtnSEDwFkCIky_kRcvOxw',
+        'https://zpxhngudkplmusxmrytv.supabase.co/storage/v1/object/sign/superapp/update.json?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2RmNDVlZDgwLTkwN2QtNDM5MC05NzAxLWMyZmY0ZDNlOGE3YyJ9.eyJ1cmwiOiJzdXBlcmFwcC91cGRhdGUuanNvbiIsImlhdCI6MTc0NzgwODY2NSwiZXhwIjoxNzQ4NDEzNDY1fQ.gDQynpqJz0jinDc-Gxunlv0pIsQh22BCHyYDcW-Fq2Q',
       );
       const data = await response.json();
 
@@ -78,7 +78,7 @@ const RegisterScreen = () => {
     }
   };
 
-  useEffect(() => {}, []);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,11 +88,18 @@ const RegisterScreen = () => {
         <ScrollView contentContainerStyle={{paddingBottom: 20}}>
           <Text style={styles.title}>Create Account 🚀</Text>
           <Text style={styles.subtitle}>
-            Join us by creating {versionS} your account
+            suhail
           </Text>
 
+          <Image
+            source={require('./video_thumbnail_2.png')}
+            style={{width: 200, height: 100}}
+          />
 
-          <Image source={require('./promotional_banner')} style = {{width : 200 , height : 400}} />
+          <Image
+            source={require('./video_thumbnail_2.png')}
+            style={{width: 200, height: 100}}
+          />
 
           <TextInput
             style={styles.input}
@@ -169,7 +176,7 @@ const RegisterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'green',
   },
   innerContainer: {
     flex: 1,
