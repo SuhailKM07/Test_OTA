@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import RNRestart from 'react-native-restart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
   Text,
@@ -9,67 +11,156 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  Image,
 } from 'react-native';
+import {unzip} from 'react-native-zip-archive';
 import {useCheckVersion} from './useCheckVersion';
+import RNFS from 'react-native-fs';
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [versionS, setVersionS] = useState(0);
 
-  const handleLogin = () => {
-    if (email && password) {
-      Alert.alert('Login Success', `Welcome back, ${email}!`);
-    } else {
-      Alert.alert('Error', 'Please enter both email and password');
+  const handleRegister = () => {
+    if (!name || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
+    Alert.alert('Success', `Account created for ${name}`);
+  };
+
+  // const {version} = useCheckVersion();
+
+  const startUpdate = async () => {
+    try {
+      const response = await fetch(
+        'https://zpxhngudkplmusxmrytv.supabase.co/storage/v1/object/sign/superapp/update.json?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5X2RmNDVlZDgwLTkwN2QtNDM5MC05NzAxLWMyZmY0ZDNlOGE3YyJ9.eyJ1cmwiOiJzdXBlcmFwcC91cGRhdGUuanNvbiIsImlhdCI6MTc0Nzc0MzM0MCwiZXhwIjoxNzQ4MzQ4MTQwfQ.7N_0E4DAtDscSD-iLu71eYGtnSEDwFkCIky_kRcvOxw',
+      );
+      const data = await response.json();
+
+      const version = data.version;
+      const bundleZipUrl =
+        Platform.OS === 'ios' ? data.downloadIosUrl : data.downloadAndroidUrl;
+
+      const zipPath = `${RNFS.DocumentDirectoryPath}/index.android.bundle`;
+      const downloadResult = await RNFS.downloadFile({
+        fromUrl: bundleZipUrl,
+        toFile: zipPath,
+      }).promise;
+
+      if (downloadResult.statusCode === 200) {
+        const stats = await RNFS.stat(zipPath);
+        Alert.alert('✅ ZIP File Size:' + stats.size);
+
+        const targetPath = RNFS.DocumentDirectoryPath;
+        await unzip(zipPath, targetPath);
+
+        await AsyncStorage.setItem('appVersion', version.toString());
+
+        Alert.alert('Update Complete', 'Restart the app to apply changes.');
+
+        RNRestart?.restart();
+      } else {
+        throw new Error('Download failed');
+      }
+    } catch (err) {
+      Alert.alert('Update failed', err.message);
     }
   };
 
-  const {version} = useCheckVersion();
+  useEffect(() => {}, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
-        style={styles.innerContainer}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <Text style={styles.title}>Welcome Back 👋</Text>
-        <Text style={styles.subtitle}>Please log in to your account</Text>
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.innerContainer}>
+        <ScrollView contentContainerStyle={{paddingBottom: 20}}>
+          <Text style={styles.title}>Create Account 🚀</Text>
+          <Text style={styles.subtitle}>
+            Join us by creating {versionS} your account
+          </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#999"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#999"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+          <Image source={require('./promotional_banner')} style = {{width : 200 , height : 400}} />
 
-        <TouchableOpacity>
-          <Text style={styles.forgotText}>Forgot Password?</Text>
-        </TouchableOpacity>
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
+            placeholderTextColor="#999"
+            value={name}
+            onChangeText={setName}
+          />
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#999"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
 
-        <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>Don't have an account? </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#999"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            placeholderTextColor="#999"
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+
           <TouchableOpacity
             onPress={() => {
-              version.onCheckVersion();
-            }}>
-            <Text style={styles.signupLink}>Sign Up</Text>
+              Alert.alert('Updating...');
+              startUpdate();
+            }}
+            style={styles.registerButton}>
+            <Text style={styles.registerButtonText}>Sign Up</Text>
           </TouchableOpacity>
-        </View>
+
+          <View style={styles.loginRedirect}>
+            <Text style={styles.loginText}>Already have an account? </Text>
+            <TouchableOpacity>
+              <Text style={styles.loginLink}>Login</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* {version.state.loading && <Text>Loading from git...</Text>}
+
+          {!!version.state.progress && (
+            <View style={styles.progress}>
+              <View
+                style={[
+                  styles.process,
+                  {
+                    width: `${version.state.progress}%`,
+                  },
+                ]}
+              />
+            </View>
+          )} */}
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -78,12 +169,25 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f6f6f6',
+    backgroundColor: 'white',
   },
   innerContainer: {
     flex: 1,
     padding: 24,
     justifyContent: 'center',
+  },
+  progress: {
+    height: 10,
+    width: '80%',
+    marginTop: 20,
+    borderRadius: 8,
+    borderColor: 'grey',
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  process: {
+    height: 10,
+    backgroundColor: 'blue',
   },
   title: {
     fontSize: 32,
@@ -106,34 +210,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     color: '#000',
   },
-  forgotText: {
-    color: '#1e90ff',
-    textAlign: 'right',
-    marginBottom: 24,
-  },
-  loginButton: {
-    backgroundColor: '#1e90ff',
+  registerButton: {
+    backgroundColor: '#28a745',
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
+    marginTop: 10,
     marginBottom: 16,
   },
-  loginButtonText: {
+  registerButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
-  signupContainer: {
+  loginRedirect: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  signupText: {
+  loginText: {
     color: '#444',
   },
-  signupLink: {
-    color: '#1e90ff',
+  loginLink: {
+    color: '#28a745',
     fontWeight: '600',
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

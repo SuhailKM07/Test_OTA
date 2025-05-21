@@ -11,31 +11,37 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
-import com.otahotupdate.OtaHotUpdate
+import java.io.File
 
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
-      object : DefaultReactNativeHost(this) {
+    object : DefaultReactNativeHost(this) {
 
-        override fun getJSBundleFile(): String? {
-          return OtaHotUpdate.bundleJS(this@MainApplication)
-          // or: return OtaHotUpdate.bundleJS(this@MainApplication, false)
+      // ✅ Use this to load custom OTA bundle if available
+     override fun getJSBundleFile(): String? {
+    val customBundle = File(filesDir, "output/index.android.bundle")
+    return if (customBundle.exists()) {
+        customBundle.absolutePath
+    } else {
+        super.getJSBundleFile()
+    }
+}
+
+
+      override fun getPackages(): List<ReactPackage> =
+        PackageList(this).packages.apply {
+          // Add any manual packages here if needed
+          // add(MyReactNativePackage())
         }
 
-        override fun getPackages(): List<ReactPackage> =
-            PackageList(this).packages.apply {
-              // Packages that cannot be autolinked yet can be added manually here, for example:
-              // add(MyReactNativePackage())
-            }
+      override fun getJSMainModuleName(): String = "index"
 
-        override fun getJSMainModuleName(): String = "index"
+      override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
-        override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
-
-        override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
-        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
-      }
+      override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+      override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+    }
 
   override val reactHost: ReactHost
     get() = getDefaultReactHost(applicationContext, reactNativeHost)
@@ -44,7 +50,6 @@ class MainApplication : Application(), ReactApplication {
     super.onCreate()
     SoLoader.init(this, OpenSourceMergedSoMapping)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      // If you opted-in for the New Architecture, we load the native entry point for this app.
       load()
     }
   }
