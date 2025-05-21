@@ -69,10 +69,10 @@ async function cleanOldOtaBundle() {
     const exists = await RNFS.exists(outputDir);
     if (exists) {
       await RNFS.unlink(outputDir);
-      console.log('✅ Old OTA bundle deleted');
+      console.log('Old OTA bundle deleted');
     }
   } catch (e) {
-    console.warn('⚠️ Failed to clean OTA folder:', e.message);
+    console.warn('Failed to clean OTA folder:', e.message);
   }
 }
 
