@@ -55,3 +55,25 @@ To test this project run the command as below
 ```js
 npm run androidp
 ```
+
+
+# Add this function if you see the version changes to clean the file
+
+```javascript
+import RNFS from 'react-native-fs';
+
+const outputDir = `${RNFS.DocumentDirectoryPath}/output`;
+
+async function cleanOldOtaBundle() {
+  try {
+    const exists = await RNFS.exists(outputDir);
+    if (exists) {
+      await RNFS.unlink(outputDir);
+      console.log('✅ Old OTA bundle deleted');
+    }
+  } catch (e) {
+    console.warn('⚠️ Failed to clean OTA folder:', e.message);
+  }
+}
+
+```
